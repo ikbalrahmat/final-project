@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Imputation Results{% endblock %}
+{% block content %}
+<h2 class="text-center">Imputation Results</h2>
+{% if datasets %}
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        {% for method, result in datasets.items() %}
+            <li class="nav-item">
+                <a class="nav-link {% if loop.first %}active{% endif %}" id="{{ method }}-tab" data-toggle="tab" href="#{{ method }}-pane" role="tab" aria-controls="{{ method }}-pane" aria-selected="{{ loop.first }}">{{ method.replace('_', ' ').title() }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        {% for method, result in datasets.items() %}
+            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ method }}-pane" role="tabpanel" aria-labelledby="{{ method }}-tab">
+                <div class="card mt-4 p-4">
+                    <h2 class="text-center">{{ method.replace('_', ' ').title() }} Analysis Result</h2>
+                    <p><strong>RMSE:</strong> {{ result['rmse'] }}</p>
+                    <h3>Imputed Data</h3>
+                    <div class="table-responsive" style="max-height: 400px; overflow: auto;">
+                        {{ result['imputed_data'] | safe }}
+                    </div>
+                    <h3>Download Imputed Data</h3>
+                    <a href="{{ result['imputed_csv_path'] }}" class="btn btn-primary">Download CSV</a>
+                    <a href="{{ result['imputed_excel_path'] }}" class="btn btn-secondary">Download Excel</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <form action="{{ url_for('final_imputation') }}" method="post">
+        <input type="hidden" name="filepath" value="{{ filepath }}">
+        <input type="hidden" name="target_column" value="{{ target_column }}">
+        <div class="form-group mt-4">
+            <label for="best_method">Pilih Metode Terbaik untuk Imputasi Akhir:</label>
+            <select class="form-control" id="best_method" name="best_method">
+                {% for method, result in datasets.items() %}
+                    <option value="{{ method }}">{{ method.replace('_', ' ').title() }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Imputasi Data Asli</button>
+    </form>    
+{% else %}
+    <p>No imputation results available. Please upload a dataset first.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Hasil Imputasi Final{% endblock %}
+{% block content %}
+<h2 class="text-center">Hasil Imputasi Final</h2>
+<div class="card mt-4 p-4">
+    <h2 class="text-center">Hasil Imputasi Menggunakan {{ result['method'] }}</h2>
+    <h3>Data yang Diimputasi</h3>
+    <div class="table-responsive" style="max-height: 400px; overflow: auto;">
+        {{ result['imputed_data'] | safe }}
+    </div>
+    <h3>Unduh Data yang Diimputasi</h3>
+    <a href="{{ result['imputed_csv_path'] }}" class="btn btn-primary">Unduh CSV</a>
+    <a href="{{ result['imputed_excel_path'] }}" class="btn btn-secondary">Unduh Excel</a>
+</div>
+{% endblock %}

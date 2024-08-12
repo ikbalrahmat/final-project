@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #20c997;
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+        .sidebar a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #17a589;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="text-center">Dashboard</h2>
+        <!-- <a href="{{ url_for('dashboard') }}">Dashboard</a> -->
+        <a href="{{ url_for('index') }}">Upload Data</a>
+        <a href="#" onclick="checkUploadStatus(event)">Imputation Results</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function checkUploadStatus(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{{ url_for('impute') }}",
+                method: "GET",
+                success: function(data) {
+                    window.location.href = "{{ url_for('impute') }}";
+                },
+                error: function() {
+                    alert('Harap unggah data terlebih dahulu sebelum melakukan imputasi.');
+                }
+            });
+        }
+
+        function validateFileUpload() {
+            const fileInput = document.getElementById('fileInput');
+            const filePath = fileInput.value;
+            const allowedExtensions = /(\.csv)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Please upload file having extensions .csv only.');
+                fileInput.value = '';
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

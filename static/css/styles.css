@@ -1,0 +1,39 @@
+.data {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.data table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.data th,
+.data td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.data th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.data tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.data td,
+.data th {
+    background-color: #fff;
+}
+
+.table-scroll {
+    height: 300px; /* Adjust this value as needed to show half the height */
+    overflow-y: scroll;
+}
